@@ -20,3 +20,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/*RUTAS DE ADMINISTRACIÓN*/
+Route::resource('/categories','CategoriasController');
+Route::get('/obtenerCategorias','CategoriasController@datatable')->name('categorias.datatable');
+Route::resource('/marca', 'MarcasController');
+Route::get('/obtenerMarcas','MarcasController@datatable')->name('marcas.datatable');
+Route::resource('/products','ProductosController');
+Route::get('/obtenerProductos','ProductosController@datatable')->name('productos.datatable');
+/**/
