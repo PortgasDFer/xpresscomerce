@@ -131,7 +131,12 @@ class MarcasController extends Controller
     public function destroy($slug_marca)
     {
         $marca=Marca::where('slug_marca','=',$slug_marca)->firstOrFail();
-        $marca->status="INACTIVO";
+        if($marca->status=="INACTIVO"){
+            $marca->status="ACTIVO";
+        }elseif($marca->status=="ACTIVO"){
+            $marca->status="INACTIVO";
+        }
+        
         $marca->save();
         alert()->warning('XpressComerce', 'Estado editado correctamente');
         return Redirect::to('/marca');

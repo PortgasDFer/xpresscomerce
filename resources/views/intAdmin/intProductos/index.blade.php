@@ -48,13 +48,15 @@
     		<div class="row">
     			<div class="col-xs-12 col-sm-12 col-md-12">
     				<div class="table-responsive">
-    					<table class="table table-bordered" id="categorias">
+    					<table class="table table-bordered" id="productos">
  							<thead>
 							    <tr>
 							      <th scope="col">Nombre</th>
-							      <th scope="col">Estado</th>
-							      <th scope="col">Editar</th>
-							      <th scope="col">Cambiar Estado</th>
+							      <th scope="col">Precio</th>
+							      <th scope="col">Disponibilidad</th>
+                    <th scope="col">Estado</th>
+							      <th scope="col">Modificar Estado</th>
+                    <th scope="col">Editar</th>
 							    </tr>
   							</thead>
   							<tbody>
@@ -70,16 +72,18 @@
 @section('scripts')
 <script>
 $(document).ready( function () {
-    $('#categorias').DataTable({
+    $('#productos').DataTable({
         "processing": true,
         "serverSide": true,
         "autoWidth": false,
-        "ajax": "/obtenerCategorias",
+        "ajax": "/obtenerProductos",
         "columns": [
-            {data:'nombre_categoria'},
+            {data:'nombre_producto'},
+            {data:'precio',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data:'disponibilidad'},
             {data:'status'},
-            {data:'edit',orderable:false, searchable:false},
-            {data:'statusBtn',orderable:false, searchable:false}
+            {data:'statusBtn',orderable:false, searchable:false},
+            {data:'edit',orderable:false, searchable:false}
         ],
         language: {
           "decimal": "",

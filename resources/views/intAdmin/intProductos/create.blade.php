@@ -54,6 +54,14 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label for="">Disponibilidad</label>
+                    <select id="inputState" class="form-control" name="disponibilidad">
+                      <option selected>Seleccione</option>
+                      <option value="INMEDIATA">Inmediata</option>
+                      <option value="INDEFINIDA">Consulte disponibilidad</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
                     <label for="">Categoria</label>
                     <select id="inputState" class="form-control" name="categoria">
                       <option selected>Seleccione</option>

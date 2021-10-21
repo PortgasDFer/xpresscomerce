@@ -21,10 +21,10 @@ class ProductosController extends Controller
      */
     public function datatable()
     {
-        $marcas=Marca::all();
-        return DataTables::of($marcas)
-                ->addColumn('edit','intAdmin.intMarcas.botones.edit')
-                ->addColumn('statusBtn','intAdmin.intMarcas.botones.status')
+        $productos=Producto::all();
+        return DataTables::of($productos)
+                ->addColumn('edit','intAdmin.intProductos.botones.edit')
+                ->addColumn('statusBtn','intAdmin.intProductos.botones.statusBtn')
                 ->rawColumns(['edit','statusBtn'])
                 ->toJson(); 
     }
@@ -70,8 +70,10 @@ class ProductosController extends Controller
             $producto->foto_producto=$foto.'.webp';
         }
         $producto->slug_producto=Str::slug($producto->nombre_producto.'-'.time());
+        $producto->disponibilidad=$request->input('disponibilidad');
         $producto->id_categoria=$request->input('categoria');
         $producto->id_marca=$request->input('id_marca');
+        $producto->status="ACTIVO";
         $producto->save();
         alert()->success('XpressComerce', 'Producto registrado correctamente');
         return Redirect::to('/products');
@@ -95,9 +97,11 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug_producto)
     {
-        //
+        $producto=Producto::where('slug_producto','=',$slug_producto)->firstOrFail();
+        $categorias=Categoria::where('status','=','ACTIVO')->get();
+        return view('intAdmin.intProductos.edit',compact('producto','categorias'));
     }
 
     /**
@@ -107,9 +111,31 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug_producto)
     {
-        //
+        $producto=Producto::where('slug_producto','=',$slug_producto)->firstOrFail();
+        $producto->nombre_producto=$request->input('nombre');
+        $producto->descrip_producto=$request->input('descripcion');
+        $producto->precio=$request->input('precio');
+        if($request->hasFile('imagen')){
+            
+            $file_path = public_path() . "/productosimg/$producto->foto_producto";
+            \File::delete($file_path);
+
+            $file=$request->file('imagen');
+            $foto=$producto->nombre_producto.$file->getClientOriginalExtension();
+            $image= Image::make($file)->encode('webp',90)->save(public_path('/productosimg/' . $foto.'.webp'));
+            $producto->foto_producto=$foto.'.webp';
+
+        }
+        $producto->slug_producto=Str::slug($producto->nombre_producto.'-'.time());
+        $producto->disponibilidad=$request->input('disponibilidad');
+        $producto->id_categoria=$request->input('categoria');
+        $producto->id_marca=$request->input('id_marca');
+        $producto->status="ACTIVO";
+        $producto->save();
+        alert()->success('XpressComerce', 'Producto editado correctamente');
+        return Redirect::to('/products');
     }
 
     /**
@@ -118,8 +144,16 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug_producto)
     {
-        //
+        $producto=Producto::where('slug_producto','=',$slug_producto)->firstOrFail();
+         if($producto->status=="INACTIVO"){
+            $producto->status="ACTIVO";
+        }elseif($producto->status=="ACTIVO"){
+            $producto->status="INACTIVO";
+        }
+        $producto->save();
+        alert()->warning('XpressComerce', 'Estado editado correctamente');
+        return Redirect::to('/products');
     }
 }
