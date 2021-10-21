@@ -3,9 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str as Str;
+use App\Producto;
+use App\Categoria;
+use Image;
+use Alert;
+use Redirect,Response;
+use DataTables;
+
 
 class ProductosController extends Controller
 {
+    /**
+     * Display a datatable of the resource.
+     *
+     * @return \Illuminate\Http\Json
+     */
+    public function datatable()
+    {
+        $marcas=Marca::all();
+        return DataTables::of($marcas)
+                ->addColumn('edit','intAdmin.intMarcas.botones.edit')
+                ->addColumn('statusBtn','intAdmin.intMarcas.botones.status')
+                ->rawColumns(['edit','statusBtn'])
+                ->toJson(); 
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +36,8 @@ class ProductosController extends Controller
      */
     public function index()
     {
-        //
+        $noProductos=Producto::all()->count();
+        return view('intAdmin.intProductos.index', compact('noProductos'));
     }
 
     /**
@@ -23,7 +47,8 @@ class ProductosController extends Controller
      */
     public function create()
     {
-        //
+        $categorias=Categoria::where('status','=','ACTIVO')->get();
+        return view('intAdmin.intProductos.create', compact('categorias'));
     }
 
     /**
@@ -34,7 +59,23 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $producto = new Producto();
+        $producto->nombre_producto=$request->input('nombre');
+        $producto->descrip_producto=$request->input('descripcion');
+        $producto->precio=$request->input('precio');
+        if($request->hasFile('imagen')){
+            $file=$request->file('imagen');
+            $foto=$producto->nombre_producto.$file->getClientOriginalExtension();
+            $image= Image::make($file)->encode('webp',90)->save(public_path('/productosimg/' . $foto.'.webp'));
+            $producto->foto_producto=$foto.'.webp';
+        }
+        $producto->slug_producto=Str::slug($producto->nombre_producto.'-'.time());
+        $producto->id_categoria=$request->input('categoria');
+        $producto->id_marca=$request->input('id_marca');
+        $producto->save();
+        alert()->success('XpressComerce', 'Producto registrado correctamente');
+        return Redirect::to('/products');
+
     }
 
     /**

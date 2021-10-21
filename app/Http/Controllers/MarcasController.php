@@ -12,6 +12,7 @@ use DataTables;
 
 class MarcasController extends Controller
 {
+
     /**
      * Display a datatable of the resource.
      *
