@@ -59,6 +59,7 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
+        $tags= explode(',', $request->tags);
         $producto = new Producto();
         $producto->nombre_producto=$request->input('nombre');
         $producto->descrip_producto=$request->input('descripcion');
@@ -75,6 +76,7 @@ class ProductosController extends Controller
         $producto->id_marca=$request->input('id_marca');
         $producto->status="ACTIVO";
         $producto->save();
+        $producto->tag($tags);
         alert()->success('XpressComerce', 'Producto registrado correctamente');
         return Redirect::to('/products');
 

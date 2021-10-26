@@ -75,7 +75,11 @@
                         <option value="{{$cat->id_categoria}}"> {{$cat->nombre_categoria}}</option>
                       @endforeach
                     </select>
-                  </div>    
+                  </div>  
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Etiquetas <small>Palabras separas por coma</small></label>
+                    <input type="text" class="form-control" data-role="tagsinput" name="tags" value="@foreach($producto->tags as $tag){{$tag->name}},  @endforeach">
+                  </div>  
                 </div>
                 <!-- /.card-body -->
 

@@ -27,6 +27,7 @@
 	<link rel="stylesheet" href="{{asset('template_adm/plugins/summernote/summernote-bs4.min.css')}}">
 	<!-- DataTables -->
     <link rel="stylesheet" href="{{asset('template_adm/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/tagsinput.css')}}">
 </head>
 <body>
 	<!-- Preloader -->
@@ -218,6 +219,7 @@
 		<strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 	</footer>
 	<!-- jQuery -->
+
 	<script src="{{asset('template_adm/plugins/jquery/jquery.min.js')}}"></script>
 	<!-- jQuery UI 1.11.4 -->
 	<script src="{{asset('template_adm/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
@@ -253,6 +255,8 @@
 	<!-- DataTables  & Plugins -->
 <script src="{{asset('template_adm/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('template_adm/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+
+	<script src="{{asset('js/tagsinput.js')}}"></script>
 	@yield('scripts')
 </body>
 </html>
